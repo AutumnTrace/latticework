@@ -1,6 +1,6 @@
 // Section 8: flip a ciphertext bit and watch implicit rejection.
-import { bytesEqual, tamper, type Exchange, type TamperResult } from '../model.ts';
-import { canvas, COLORS, el, figure, hex, hideTooltip, html, pointer, section, showTooltip } from '../ui.ts';
+import { bytesEqual, flipRange, tamper, type Exchange, type FlipStats, type TamperResult } from '../model.ts';
+import { canvas, COLORS, el, figure, fmt, hex, hideTooltip, html, pointer, section, showTooltip } from '../ui.ts';
 import { bitGrid } from './exchange.ts';
 
 const COLS = 32;
@@ -203,6 +203,37 @@ export function tamperSection(ex: Exchange): HTMLElement {
   drawGrid();
   renderResult();
 
+  // Every single-bit flip, in chunks so the page stays responsive.
+  const totalBits = params.ciphertextBytes * 8;
+  const allButton = el('button', { type: 'button', class: 'button', 'data-testid': 'flip-all' }, `Try all ${fmt.int(totalBits)} single-bit flips`);
+  const allResult = el(
+    'p',
+    { class: 'figure__caption', style: 'margin:0', 'data-testid': 'flip-all-result' },
+    'Each one is a full decapsulation: decrypt, re-encrypt, compare.',
+  );
+  allButton.addEventListener('click', () => {
+    allButton.disabled = true;
+    const stats: FlipStats = { flips: 0, rejected: 0, messageUnchanged: 0 };
+    const t0 = performance.now();
+    let next = 0;
+    const step = () => {
+      const end = Math.min(next + 256, totalBits);
+      flipRange(ex, next, end, stats);
+      next = end;
+      allResult.textContent = `${fmt.int(stats.flips)} of ${fmt.int(totalBits)} tried…`;
+      if (next < totalBits) {
+        setTimeout(step, 0);
+        return;
+      }
+      allResult.replaceChildren(
+        el('span', { class: `badge ${stats.rejected === totalBits ? 'badge--ok' : 'badge--bad'}` }, `${fmt.int(stats.rejected)} rejected`),
+        ` of ${fmt.int(totalBits)} flips, in ${((performance.now() - t0) / 1000).toFixed(1)} s. In ${fmt.int(stats.messageUnchanged)} of them (${fmt.pct(stats.messageUnchanged / totalBits)}) decryption still recovered m exactly; only the re-encryption check noticed.`,
+      );
+      allButton.disabled = false;
+    };
+    setTimeout(step, 0);
+  });
+
   body.append(
     figure(
       el(
@@ -231,6 +262,7 @@ export function tamperSection(ex: Exchange): HTMLElement {
         el('div', { style: 'flex:1; min-width:320px' }, result),
       ),
     ),
+    figure(el('div', { style: 'display:flex; flex-wrap:wrap; gap:14px; align-items:center' }, allButton, allResult)),
   );
   return root;
 }

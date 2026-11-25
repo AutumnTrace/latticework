@@ -74,3 +74,10 @@ test('a flipped ciphertext bit is rejected, and reset restores the exchange', as
   await expect(page.getByTestId('tamper-verdict')).toContainText('Untouched');
   expect(errors).toEqual([]);
 });
+
+test('every single-bit flip of an ML-KEM-512 ciphertext is rejected', async ({ page }) => {
+  await page.goto('./');
+  await page.getByTestId('set-512').click();
+  await page.getByTestId('flip-all').click();
+  await expect(page.getByTestId('flip-all-result')).toContainText('6,144 rejected of 6,144 flips', { timeout: 30_000 });
+});
