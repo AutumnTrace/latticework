@@ -8,6 +8,7 @@ import {
   ciphertextField,
   compressionErrors,
   dependencyCone,
+  flipRange,
   influenceCone,
   multiplyCheck,
   noiseBreakdown,
@@ -65,6 +66,16 @@ describe.each([512, 768, 1024] as SetId[])('ML-KEM-%i exchange', (set) => {
       expect(bytesEqual(r.key, ex.bobKey)).toBe(false);
       expect(r.ciphertextBytesDiffer).toBeGreaterThan(0);
     }
+  });
+
+  it('rejects every single-bit flip in a stretch of c₁ and c₂', () => {
+    const c2Start = ex.c.length * 8 - 256;
+    const a = flipRange(ex, 0, 128);
+    const b = flipRange(ex, c2Start, c2Start + 128);
+    expect(a.rejected).toBe(128);
+    expect(b.rejected).toBe(128);
+    // Low-order flips usually leave the decrypted message as it was.
+    expect(a.messageUnchanged + b.messageUnchanged).toBeGreaterThan(0);
   });
 
   it('maps ciphertext bytes to the right field', () => {

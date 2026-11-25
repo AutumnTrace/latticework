@@ -363,6 +363,31 @@ export function tamper(ex: Exchange, byte: number, bit: number): TamperResult {
   return { byte, bit, c, trace: full, key, messageBitsChanged, ciphertextBytesDiffer };
 }
 
+export interface FlipStats {
+  flips: number;
+  rejected: number;
+  /** Flips after which decryption still recovered exactly m. */
+  messageUnchanged: number;
+}
+
+/**
+ * Flip ciphertext bits `from` to `to` - 1 (counting bit 0 of byte 0 as 0),
+ * one at a time, decapsulate each, and add up what happened.
+ */
+export function flipRange(ex: Exchange, from: number, to: number, acc: FlipStats = { flips: 0, rejected: 0, messageUnchanged: 0 }): FlipStats {
+  const c = ex.c.slice();
+  for (let b = from; b < to; b++) {
+    c[b >> 3]! ^= 1 << (b & 7);
+    const trace: DecapsulateTrace = {};
+    ex.kem.decapsulateInternal(ex.dk, c, trace);
+    c[b >> 3]! ^= 1 << (b & 7);
+    acc.flips++;
+    if (!trace.accepted) acc.rejected++;
+    if (bytesEqual(trace.mPrime!, ex.m)) acc.messageUnchanged++;
+  }
+  return acc;
+}
+
 /** Which ciphertext field a byte belongs to, and the coefficient(s) it carries bits of. */
 export function ciphertextField(ex: Exchange, byte: number): { field: 'c1' | 'c2'; poly: number; coeffs: [number, number] } {
   const { k, du, dv } = ex.kem.params;
