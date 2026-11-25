@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   check:
-    name: Typecheck, lint, format, test
+    name: Typecheck, lint, format, test, build, e2e
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -47,3 +47,18 @@ jobs:
 
       - name: Unit, vector and property tests
         run: npm test
+
+      - name: Build library and explainer
+        run: npm run build
+
+      # Ubuntu runners ship Google Chrome, which Playwright uses via channel: 'chrome'.
+      - name: End-to-end tests
+        run: npm run e2e
+
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results
+          path: test-results/
+          if-no-files-found: ignore
