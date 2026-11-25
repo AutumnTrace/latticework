@@ -89,6 +89,6 @@ export function keccakBits(fn: Sha3Function, message: Uint8Array, messageBits: n
   sponge.absorb(message.subarray(0, whole));
   if (rest > 0) sponge.absorbFinalBits(message[whole]!, rest);
   const out = sponge.squeeze(Math.ceil(bitsOut / 8));
-  if (bitsOut % 8 !== 0) out[out.length - 1]! &= (1 << bitsOut % 8) - 1;
+  if (bitsOut % 8 !== 0) out[out.length - 1]! &= (1 << (bitsOut % 8)) - 1;
   return out;
 }
