@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { RHO_OFFSETS, ROUND_CONSTANTS } from '../src/keccak.ts';
+import { keccakF1600, keccakF1600Reference, RHO_OFFSETS, ROUND_CONSTANTS } from '../src/keccak.ts';
 import { keccakBits, sha3_256, sha3_512, shake128, shake256, type Sha3Function } from '../src/sha3.ts';
 import { fromHex, loadVectors, toHex } from './helpers/acvp.ts';
 
@@ -43,6 +43,27 @@ describe('Keccak-f[1600] constants', () => {
       (_, i) => ROUND_CONSTANTS[2 * i + 1]!.toString(16).padStart(8, '0') + ROUND_CONSTANTS[2 * i]!.toString(16).padStart(8, '0'),
     );
     expect(generated).toEqual(published);
+  });
+});
+
+describe('Keccak-f[1600]', () => {
+  it('the unrolled permutation matches the reference on random states', () => {
+    let seed = 0x9e3779b9;
+    const next = () => (seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0);
+    for (let n = 0; n < 200; n++) {
+      const a = Uint32Array.from({ length: 50 }, next);
+      const b = a.slice();
+      keccakF1600(a);
+      keccakF1600Reference(b);
+      expect(a).toEqual(b);
+    }
+  });
+
+  it('permutes the zero state to the known first output lane', () => {
+    const s = new Uint32Array(50);
+    keccakF1600(s);
+    // Keccak team test vector: lane 0 after one permutation of zero is F1258F7940E1DDE7.
+    expect(s[1]!.toString(16).padStart(8, '0') + s[0]!.toString(16).padStart(8, '0')).toBe('f1258f7940e1dde7');
   });
 });
 

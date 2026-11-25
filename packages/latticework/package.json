@@ -41,7 +41,8 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "bench": "node bench/bench.ts"
   },
   "homepage": "https://autumntrace.github.io/latticework/",
   "engines": {
