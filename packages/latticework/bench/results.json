@@ -12,109 +12,109 @@
     "ML-KEM-512 keygen": {
       "latticework": {
         "name": "ML-KEM-512 keygen",
-        "opsPerSec": 12299.14972451625,
-        "usPerOp": 81.30643356643355
+        "opsPerSec": 14016.27019971061,
+        "usPerOp": 71.34565656565658
       },
       "noble": {
         "name": "ML-KEM-512 keygen",
-        "opsPerSec": 9273.950027125815,
-        "usPerOp": 107.82891832229554
+        "opsPerSec": 9855.020453022533,
+        "usPerOp": 101.47112375533429
       }
     },
     "ML-KEM-512 encaps": {
       "latticework": {
         "name": "ML-KEM-512 encaps",
-        "opsPerSec": 7180.671322369914,
-        "usPerOp": 139.262745098039
+        "opsPerSec": 8364.774542936231,
+        "usPerOp": 119.54894837476117
       },
       "noble": {
         "name": "ML-KEM-512 encaps",
-        "opsPerSec": 5124.937479873643,
-        "usPerOp": 195.12433155080274
+        "opsPerSec": 5735.888410898196,
+        "usPerOp": 174.34090909090887
       }
     },
     "ML-KEM-512 decaps": {
       "latticework": {
         "name": "ML-KEM-512 decaps",
-        "opsPerSec": 7195.061334446055,
-        "usPerOp": 138.98422174840147
+        "opsPerSec": 9143.567065161751,
+        "usPerOp": 109.36650793650736
       },
       "noble": {
         "name": "ML-KEM-512 decaps",
-        "opsPerSec": 4621.667804940974,
-        "usPerOp": 216.37210682492392
+        "opsPerSec": 6480.85263162566,
+        "usPerOp": 154.30068493150716
       }
     },
     "ML-KEM-768 keygen": {
       "latticework": {
         "name": "ML-KEM-768 keygen",
-        "opsPerSec": 7689.141223893885,
-        "usPerOp": 130.05353535353413
+        "opsPerSec": 8244.050767233985,
+        "usPerOp": 121.29959266802484
       },
       "noble": {
         "name": "ML-KEM-768 keygen",
-        "opsPerSec": 5270.784402598633,
-        "usPerOp": 189.7250814332254
+        "opsPerSec": 5528.54202958594,
+        "usPerOp": 180.8795148247964
       }
     },
     "ML-KEM-768 encaps": {
       "latticework": {
         "name": "ML-KEM-768 encaps",
-        "opsPerSec": 4997.26340337428,
-        "usPerOp": 200.10952380952634
+        "opsPerSec": 5199.588365921105,
+        "usPerOp": 192.32291666666393
       },
       "noble": {
         "name": "ML-KEM-768 encaps",
-        "opsPerSec": 3172.285304262464,
-        "usPerOp": 315.23015873015675
+        "opsPerSec": 3341.971324790304,
+        "usPerOp": 299.2245901639345
       }
     },
     "ML-KEM-768 decaps": {
       "latticework": {
         "name": "ML-KEM-768 decaps",
-        "opsPerSec": 5700.147775948992,
-        "usPerOp": 175.43404825737426
+        "opsPerSec": 4866.948160425222,
+        "usPerOp": 205.46756756756386
       },
       "noble": {
         "name": "ML-KEM-768 decaps",
-        "opsPerSec": 3677.67686200426,
-        "usPerOp": 271.9107843137203
+        "opsPerSec": 2793.7270891000067,
+        "usPerOp": 357.944769874479
       }
     },
     "ML-KEM-1024 keygen": {
       "latticework": {
         "name": "ML-KEM-1024 keygen",
-        "opsPerSec": 5019.2637483675,
-        "usPerOp": 199.23240740741048
+        "opsPerSec": 5678.25990549213,
+        "usPerOp": 176.11029023746858
       },
       "noble": {
         "name": "ML-KEM-1024 keygen",
-        "opsPerSec": 3145.345995442928,
-        "usPerOp": 317.930046948358
+        "opsPerSec": 3984.5808794452973,
+        "usPerOp": 250.9674242424243
       }
     },
     "ML-KEM-1024 encaps": {
       "latticework": {
         "name": "ML-KEM-1024 encaps",
-        "opsPerSec": 3867.2524958403637,
-        "usPerOp": 258.58151260503547
+        "opsPerSec": 2904.911151014032,
+        "usPerOp": 344.2446078431435
       },
       "noble": {
         "name": "ML-KEM-1024 encaps",
-        "opsPerSec": 2585.884739609735,
-        "usPerOp": 386.71483870967944
+        "opsPerSec": 1821.9971601975797,
+        "usPerOp": 548.8482758620539
       }
     },
     "ML-KEM-1024 decaps": {
       "latticework": {
         "name": "ML-KEM-1024 decaps",
-        "opsPerSec": 4630.37742960216,
-        "usPerOp": 215.96511627906744
+        "opsPerSec": 2997.9624626376776,
+        "usPerOp": 333.55988023951994
       },
       "noble": {
         "name": "ML-KEM-1024 decaps",
-        "opsPerSec": 2646.809712027166,
-        "usPerOp": 377.8133333333244
+        "opsPerSec": 1840.441340875591,
+        "usPerOp": 543.3479338842983
       }
     }
   },
@@ -122,25 +122,25 @@
     "SHA3-256, 1 MiB in": {
       "latticework": {
         "name": "SHA3-256, 1 MiB",
-        "opsPerSec": 103.7696550844913,
-        "usPerOp": 9636.728571428519
+        "opsPerSec": 97.31618189692081,
+        "usPerOp": 10275.783333333191
       },
       "noble": {
         "name": "SHA3-256, 1 MiB",
-        "opsPerSec": 55.76560600483891,
-        "usPerOp": 17932.2000000005
+        "opsPerSec": 54.10494194539649,
+        "usPerOp": 18482.600000000275
       }
     },
     "SHAKE128, 1 MiB out": {
       "latticework": {
         "name": "SHAKE128, 1 MiB out",
-        "opsPerSec": 128.6271057329074,
-        "usPerOp": 7774.411111111274
+        "opsPerSec": 121.4110039996261,
+        "usPerOp": 8236.485714285664
       },
       "noble": {
         "name": "SHAKE128, 1 MiB out",
-        "opsPerSec": 70.74875172670974,
-        "usPerOp": 14134.525000000396
+        "opsPerSec": 62.40119810300237,
+        "usPerOp": 16025.333333333643
       }
     }
   }
