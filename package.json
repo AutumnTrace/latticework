@@ -1,0 +1,32 @@
+{
+  "name": "latticework-monorepo",
+  "private": true,
+  "description": "latticework: ML-KEM (FIPS 203) from scratch in TypeScript, checked against NIST's test vectors, with an explainer that walks through a real exchange",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutumnTrace/latticework.git"
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "oxlint --deny-warnings",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "vectors": "node scripts/fetch-vectors.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "oxlint": "^1.95.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}

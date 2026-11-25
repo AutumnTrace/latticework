@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, lint, test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # The NIST vectors are pinned to a commit and hash-checked, so the
+      # cache key only has to change when the script does.
+      - uses: actions/cache@v6
+        with:
+          path: vectors
+          key: acvp-${{ hashFiles('scripts/fetch-vectors.mjs') }}
+
+      - name: Fetch NIST ACVP vectors
+        run: npm run vectors
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit, vector and property tests
+        run: npm test

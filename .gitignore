@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+.vite/
+# NIST ACVP vectors, fetched and hash-checked by scripts/fetch-vectors.mjs
+vectors/
+# playwright output
+test-results/
+playwright-report/
+.media-frames/

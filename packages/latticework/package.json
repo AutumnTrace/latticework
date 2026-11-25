@@ -1,0 +1,50 @@
+{
+  "name": "@autumntrace/latticework",
+  "version": "0.1.0",
+  "description": "ML-KEM (FIPS 203) from scratch: Keccak, the NTT, K-PKE and the KEM, with no runtime dependencies.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Mina Rotari",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AutumnTrace/latticework.git",
+    "directory": "packages/latticework"
+  },
+  "keywords": [
+    "ml-kem",
+    "kyber",
+    "fips-203",
+    "post-quantum",
+    "kem",
+    "lattice",
+    "sha3",
+    "keccak"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./sha3": {
+      "types": "./dist/sha3.d.ts",
+      "default": "./dist/sha3.js"
+    },
+    "./internals": {
+      "types": "./dist/internals.d.ts",
+      "default": "./dist/internals.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "homepage": "https://autumntrace.github.io/latticework/",
+  "engines": {
+    "node": ">=20"
+  }
+}
