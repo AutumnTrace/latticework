@@ -1,0 +1,5 @@
+dist/
+vectors/
+package-lock.json
+docs/media/
+.media-frames/

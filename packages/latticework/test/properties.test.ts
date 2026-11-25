@@ -73,9 +73,12 @@ describe('ring arithmetic', () => {
 describe('encoding', () => {
   it('ByteDecode_d inverts ByteEncode_d for d-bit values', () => {
     fc.assert(
-      fc.property(fc.integer({ min: 1, max: 11 }).chain((d) => fc.tuple(fc.constant(d), poly(2 ** d - 1))), ([d, f]) => {
-        expect(byteDecode(byteEncode(f, d), d)).toEqual(f);
-      }),
+      fc.property(
+        fc.integer({ min: 1, max: 11 }).chain((d) => fc.tuple(fc.constant(d), poly(2 ** d - 1))),
+        ([d, f]) => {
+          expect(byteDecode(byteEncode(f, d), d)).toEqual(f);
+        },
+      ),
     );
   });
 
@@ -91,9 +94,12 @@ describe('encoding', () => {
 
   it('Compress_d(Decompress_d(y)) == y: decompression loses nothing', () => {
     fc.assert(
-      fc.property(fc.constantFrom(1, 4, 5, 10, 11).chain((d) => fc.tuple(fc.constant(d), poly(2 ** d - 1))), ([d, y]) => {
-        expect(compress(decompress(y, d), d)).toEqual(y);
-      }),
+      fc.property(
+        fc.constantFrom(1, 4, 5, 10, 11).chain((d) => fc.tuple(fc.constant(d), poly(2 ** d - 1))),
+        ([d, y]) => {
+          expect(compress(decompress(y, d), d)).toEqual(y);
+        },
+      ),
     );
   });
 });

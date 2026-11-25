@@ -91,9 +91,15 @@ describe('SHA-3 against @noble/hashes', () => {
   // Lengths around the rates (72, 136, 168 bytes) are where padding bugs live.
   const message = fc.oneof(
     fc.uint8Array({ maxLength: 1200 }),
-    fc.integer({ min: 0, max: 4 }).chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 136 * m + d), maxLength: Math.max(0, 136 * m + d) }))),
-    fc.integer({ min: 0, max: 4 }).chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 168 * m + d), maxLength: Math.max(0, 168 * m + d) }))),
-    fc.integer({ min: 0, max: 8 }).chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 72 * m + d), maxLength: Math.max(0, 72 * m + d) }))),
+    fc
+      .integer({ min: 0, max: 4 })
+      .chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 136 * m + d), maxLength: Math.max(0, 136 * m + d) }))),
+    fc
+      .integer({ min: 0, max: 4 })
+      .chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 168 * m + d), maxLength: Math.max(0, 168 * m + d) }))),
+    fc
+      .integer({ min: 0, max: 8 })
+      .chain((m) => fc.integer({ min: -2, max: 2 }).chain((d) => fc.uint8Array({ minLength: Math.max(0, 72 * m + d), maxLength: Math.max(0, 72 * m + d) }))),
   );
 
   it('SHA3-256 and SHA3-512 agree on any message', () => {
