@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>latticework: one ML-KEM exchange, step by step</title>
+    <meta
+      name="description"
+      content="A real ML-KEM (FIPS 203) key exchange run in your browser, with every intermediate value drawn: the matrix, the noise, the NTT, compression, and why decapsulation works."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%230e1116'/%3E%3Cg fill='%235ad1b3'%3E%3Ccircle cx='4' cy='4' r='1.4'/%3E%3Ccircle cx='8' cy='6' r='1.4'/%3E%3Ccircle cx='12' cy='8' r='1.4'/%3E%3Ccircle cx='4' cy='10' r='1.4'/%3E%3Ccircle cx='8' cy='12' r='1.4'/%3E%3C/g%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="masthead__inner">
+        <p class="eyebrow">latticework · FIPS 203</p>
+        <h1>One ML-KEM exchange, step by step</h1>
+        <p class="lede">
+          ML-KEM is the post-quantum key-encapsulation mechanism NIST standardised in August 2024 (it was called Kyber during the competition). This page runs
+          one exchange in your browser with <a href="https://github.com/AutumnTrace/latticework">latticework</a>, a from-scratch TypeScript implementation, and
+          draws the actual numbers at every step. Every figure comes from values recorded while the real functions ran.
+        </p>
+      </div>
+    </header>
+
+    <nav class="controls" aria-label="Exchange settings">
+      <div class="controls__inner">
+        <div class="segmented" role="radiogroup" aria-label="Parameter set" id="set-picker"></div>
+        <button type="button" class="button" id="reroll" data-testid="reroll">New randomness</button>
+        <button type="button" class="button button--quiet" id="copy-link">Copy link</button>
+        <span class="controls__status" id="status" aria-live="polite"></span>
+      </div>
+    </nav>
+
+    <main id="sections"></main>
+
+    <footer class="footer">
+      <p>
+        latticework is unaudited and written for learning. JavaScript gives no constant-time guarantees: the engine decides how long a comparison or a modulo
+        takes, and this code makes no claim to resist timing or cache side channels. For anything real, use an audited implementation.
+      </p>
+      <p>
+        <a href="https://github.com/AutumnTrace/latticework">Source on GitHub</a> · <a href="https://doi.org/10.6028/NIST.FIPS.203">FIPS 203</a> · MIT license
+      </p>
+    </footer>
+
+    <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -17,20 +17,26 @@
   },
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p e2e/tsconfig.json",
     "lint": "oxlint --deny-warnings",
     "test": "vitest run",
     "test:watch": "vitest",
     "vectors": "node scripts/fetch-vectors.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "dev": "npm run dev -w explainer",
+    "e2e": "playwright test",
+    "media": "npm run build && node scripts/capture-media.mjs"
   },
   "devDependencies": {
     "@noble/hashes": "^2.4.0",
     "@noble/post-quantum": "^0.7.1",
+    "@playwright/test": "^1.65.1",
     "@types/node": "^24.19.2",
     "fast-check": "^4.11.0",
+    "gifenc": "^1.0.3",
     "oxlint": "^1.95.0",
+    "pngjs": "^7.0.0",
     "prettier": "^3.10.1",
     "typescript": "^7.0.2",
     "vitest": "^5.1.1"

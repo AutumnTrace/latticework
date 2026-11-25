@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@autumntrace/latticework": ["../../packages/latticework/src/index.ts"],
+      "@autumntrace/latticework/internals": ["../../packages/latticework/src/internals.ts"]
+    }
+  },
+  "include": ["src", "test", "vite.config.ts"]
+}
