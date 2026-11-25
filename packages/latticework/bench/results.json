@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-25",
+  "machine": {
+    "cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "cores": 16,
+    "memoryGiB": 31,
+    "os": "win32 10.0.26200 x64",
+    "node": "v24.21.0",
+    "v8": "13.6.233.17-node.53"
+  },
+  "kem": {
+    "ML-KEM-512 keygen": {
+      "latticework": {
+        "name": "ML-KEM-512 keygen",
+        "opsPerSec": 12299.14972451625,
+        "usPerOp": 81.30643356643355
+      },
+      "noble": {
+        "name": "ML-KEM-512 keygen",
+        "opsPerSec": 9273.950027125815,
+        "usPerOp": 107.82891832229554
+      }
+    },
+    "ML-KEM-512 encaps": {
+      "latticework": {
+        "name": "ML-KEM-512 encaps",
+        "opsPerSec": 7180.671322369914,
+        "usPerOp": 139.262745098039
+      },
+      "noble": {
+        "name": "ML-KEM-512 encaps",
+        "opsPerSec": 5124.937479873643,
+        "usPerOp": 195.12433155080274
+      }
+    },
+    "ML-KEM-512 decaps": {
+      "latticework": {
+        "name": "ML-KEM-512 decaps",
+        "opsPerSec": 7195.061334446055,
+        "usPerOp": 138.98422174840147
+      },
+      "noble": {
+        "name": "ML-KEM-512 decaps",
+        "opsPerSec": 4621.667804940974,
+        "usPerOp": 216.37210682492392
+      }
+    },
+    "ML-KEM-768 keygen": {
+      "latticework": {
+        "name": "ML-KEM-768 keygen",
+        "opsPerSec": 7689.141223893885,
+        "usPerOp": 130.05353535353413
+      },
+      "noble": {
+        "name": "ML-KEM-768 keygen",
+        "opsPerSec": 5270.784402598633,
+        "usPerOp": 189.7250814332254
+      }
+    },
+    "ML-KEM-768 encaps": {
+      "latticework": {
+        "name": "ML-KEM-768 encaps",
+        "opsPerSec": 4997.26340337428,
+        "usPerOp": 200.10952380952634
+      },
+      "noble": {
+        "name": "ML-KEM-768 encaps",
+        "opsPerSec": 3172.285304262464,
+        "usPerOp": 315.23015873015675
+      }
+    },
+    "ML-KEM-768 decaps": {
+      "latticework": {
+        "name": "ML-KEM-768 decaps",
+        "opsPerSec": 5700.147775948992,
+        "usPerOp": 175.43404825737426
+      },
+      "noble": {
+        "name": "ML-KEM-768 decaps",
+        "opsPerSec": 3677.67686200426,
+        "usPerOp": 271.9107843137203
+      }
+    },
+    "ML-KEM-1024 keygen": {
+      "latticework": {
+        "name": "ML-KEM-1024 keygen",
+        "opsPerSec": 5019.2637483675,
+        "usPerOp": 199.23240740741048
+      },
+      "noble": {
+        "name": "ML-KEM-1024 keygen",
+        "opsPerSec": 3145.345995442928,
+        "usPerOp": 317.930046948358
+      }
+    },
+    "ML-KEM-1024 encaps": {
+      "latticework": {
+        "name": "ML-KEM-1024 encaps",
+        "opsPerSec": 3867.2524958403637,
+        "usPerOp": 258.58151260503547
+      },
+      "noble": {
+        "name": "ML-KEM-1024 encaps",
+        "opsPerSec": 2585.884739609735,
+        "usPerOp": 386.71483870967944
+      }
+    },
+    "ML-KEM-1024 decaps": {
+      "latticework": {
+        "name": "ML-KEM-1024 decaps",
+        "opsPerSec": 4630.37742960216,
+        "usPerOp": 215.96511627906744
+      },
+      "noble": {
+        "name": "ML-KEM-1024 decaps",
+        "opsPerSec": 2646.809712027166,
+        "usPerOp": 377.8133333333244
+      }
+    }
+  },
+  "hashing": {
+    "SHA3-256, 1 MiB in": {
+      "latticework": {
+        "name": "SHA3-256, 1 MiB",
+        "opsPerSec": 103.7696550844913,
+        "usPerOp": 9636.728571428519
+      },
+      "noble": {
+        "name": "SHA3-256, 1 MiB",
+        "opsPerSec": 55.76560600483891,
+        "usPerOp": 17932.2000000005
+      }
+    },
+    "SHAKE128, 1 MiB out": {
+      "latticework": {
+        "name": "SHAKE128, 1 MiB out",
+        "opsPerSec": 128.6271057329074,
+        "usPerOp": 7774.411111111274
+      },
+      "noble": {
+        "name": "SHAKE128, 1 MiB out",
+        "opsPerSec": 70.74875172670974,
+        "usPerOp": 14134.525000000396
+      }
+    }
+  }
+}

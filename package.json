@@ -26,7 +26,9 @@
     "format:check": "prettier --check .",
     "dev": "npm run dev -w explainer",
     "e2e": "playwright test",
-    "media": "npm run build && node scripts/capture-media.mjs"
+    "media": "npm run build && node scripts/capture-media.mjs",
+    "gen:keccak": "node scripts/gen-keccak.mjs && prettier --write packages/latticework/src/keccak-f1600.ts",
+    "bench": "npm run bench -w @autumntrace/latticework"
   },
   "devDependencies": {
     "@noble/hashes": "^2.4.0",

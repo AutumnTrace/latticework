@@ -5,59 +5,15 @@
 // halves in a Uint32Array: lane i lives at [2i] (low word) and [2i + 1]
 // (high word). Lane (x, y) is lane index x + 5y, as in the standard.
 //
-// The rotation offsets and round constants are not typed in from a table:
-// they are generated the way FIPS 202 defines them (Algorithm 2 for rho,
-// Algorithm 5 for rc), and a test compares the result with the published
-// values.
+// Two versions of the permutation live here. keccakF1600Reference is the
+// one to read: loops and tables, close to the standard. keccakF1600, the one
+// the sponge uses, is generated from the same constants as straight-line
+// code (scripts/gen-keccak.mjs); a test checks they agree.
 
-/** Rotation offsets r[x + 5y] for the rho step (FIPS 202, Algorithm 2). */
-export const RHO_OFFSETS: readonly number[] = (() => {
-  const r = Array.from({ length: 25 }, () => 0);
-  let x = 1;
-  let y = 0;
-  for (let t = 0; t < 24; t++) {
-    r[x + 5 * y] = (((t + 1) * (t + 2)) / 2) % 64;
-    [x, y] = [y, (2 * x + 3 * y) % 5];
-  }
-  return r;
-})();
+import { RHO_OFFSETS, ROUND_CONSTANTS } from './keccak-constants.ts';
+import { keccakF1600 } from './keccak-f1600.ts';
 
-/** rc(t) from FIPS 202 Algorithm 5: one output bit of an 8-bit LFSR. */
-function rc(t: number): number {
-  if (t % 255 === 0) return 1;
-  // R[0..7], R[0] first. Each step prepends a 0 (shifting every bit up one
-  // place), XORs the bit that fell off the end into positions 0, 4, 5, 6,
-  // and truncates back to 8 bits.
-  let r = [1, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 1; i <= t % 255; i++) {
-    const shifted = [0, ...r];
-    const b8 = shifted[8]!;
-    shifted[0]! ^= b8;
-    shifted[4]! ^= b8;
-    shifted[5]! ^= b8;
-    shifted[6]! ^= b8;
-    r = shifted.slice(0, 8);
-  }
-  return r[0]!;
-}
-
-/** Round constants for the iota step, as [lo, hi] pairs (FIPS 202, Algorithm 6). */
-export const ROUND_CONSTANTS: Uint32Array = (() => {
-  const out = new Uint32Array(48);
-  for (let round = 0; round < 24; round++) {
-    let lo = 0;
-    let hi = 0;
-    for (let j = 0; j <= 6; j++) {
-      if (rc(j + 7 * round) === 0) continue;
-      const bit = (1 << j) - 1; // bit positions 0, 1, 3, 7, 15, 31, 63
-      if (bit < 32) lo |= 1 << bit;
-      else hi |= 1 << (bit - 32);
-    }
-    out[2 * round] = lo >>> 0;
-    out[2 * round + 1] = hi >>> 0;
-  }
-  return out;
-})();
+export { keccakF1600, RHO_OFFSETS, ROUND_CONSTANTS };
 
 // rho and pi fused: lane (x, y) is rotated by r[x, y] and moved to
 // (y, 2x + 3y mod 5). Precompute the destination and the rotation for each
@@ -78,8 +34,8 @@ for (let x = 0; x < 5; x++) {
 const C = new Uint32Array(10);
 const B = new Uint32Array(50);
 
-/** Keccak-f[1600]: 24 rounds of theta, rho, pi, chi and iota, in place. */
-export function keccakF1600(s: Uint32Array): void {
+/** Keccak-f[1600]: 24 rounds of theta, rho, pi, chi and iota, in place. The readable version. */
+export function keccakF1600Reference(s: Uint32Array): void {
   for (let round = 0; round < 24; round++) {
     // theta: XOR each lane with the parities of two neighbouring columns.
     for (let x = 0; x < 5; x++) {
@@ -166,12 +122,32 @@ export class KeccakSponge {
 
   absorb(data: Uint8Array): this {
     if (this.squeezing) throw new Error('cannot absorb after squeezing has started');
-    const { bytes, rate } = this;
+    const { bytes, rate, state } = this;
+    const n = data.length;
     let pos = this.pos;
-    for (let i = 0; i < data.length; i++) {
-      bytes[pos++]! ^= data[i]!;
+    let i = 0;
+    // Byte by byte up to a block boundary...
+    while (i < n && pos !== 0) {
+      bytes[pos++]! ^= data[i++]!;
       if (pos === rate) {
-        keccakF1600(this.state);
+        keccakF1600(state);
+        pos = 0;
+      }
+    }
+    // ...whole blocks a 32-bit word at a time (every rate used here is a
+    // multiple of 8 bytes)...
+    if ((rate & 3) === 0) {
+      const words = rate >>> 2;
+      while (n - i >= rate) {
+        for (let w = 0; w < words; w++, i += 4) state[w]! ^= data[i]! | (data[i + 1]! << 8) | (data[i + 2]! << 16) | (data[i + 3]! << 24);
+        keccakF1600(state);
+      }
+    }
+    // ...and the tail byte by byte again.
+    while (i < n) {
+      bytes[pos++]! ^= data[i++]!;
+      if (pos === rate) {
+        keccakF1600(state);
         pos = 0;
       }
     }
@@ -221,12 +197,16 @@ export class KeccakSponge {
     if (!this.squeezing) this.pad(0, 0);
     const { bytes, rate } = this;
     let pos = this.pos;
-    for (let i = 0; i < out.length; i++) {
+    let i = 0;
+    while (i < out.length) {
       if (pos === rate) {
         keccakF1600(this.state);
         pos = 0;
       }
-      out[i] = bytes[pos++]!;
+      const take = Math.min(rate - pos, out.length - i);
+      out.set(bytes.subarray(pos, pos + take), i);
+      i += take;
+      pos += take;
     }
     this.pos = pos;
     return out;
