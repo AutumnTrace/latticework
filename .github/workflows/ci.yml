@@ -26,14 +26,14 @@ jobs:
 
       - run: npm ci
 
-      # The NIST vectors are pinned to a commit and hash-checked, so the
+      # The vectors are pinned to commits and hash-checked, so the
       # cache key only has to change when the script does.
       - uses: actions/cache@v6
         with:
           path: vectors
           key: acvp-${{ hashFiles('scripts/fetch-vectors.mjs') }}
 
-      - name: Fetch NIST ACVP vectors
+      - name: Fetch test vectors (NIST ACVP, C2SP/CCTV)
         run: npm run vectors
 
       - name: Typecheck
@@ -45,8 +45,9 @@ jobs:
       - name: Formatting
         run: npm run format:check
 
+      # test:full adds the accumulated CCTV runs (10,000 rounds per parameter set).
       - name: Unit, vector and property tests
-        run: npm test
+        run: npm run test:full
 
       - name: Build library and explainer
         run: npm run build

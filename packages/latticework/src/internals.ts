@@ -23,5 +23,5 @@ export {
 } from './ntt.ts';
 export { byteDecode, byteDecodeVector, byteEncode, byteEncodeVector, compress, decompress } from './encoding.ts';
 export { prf, sampleNtt, samplePolyCbd, type SampleNttStats } from './sampling.ts';
-export { expandMatrix, G, kpkeDecrypt, kpkeEncrypt, kpkeKeyGen, type DecryptTrace, type EncryptTrace, type KeyGenTrace } from './kpke.ts';
+export { expandMatrix, G, kpkeDecrypt, kpkeEncrypt, kpkeKeyGen, kpkeKeyGenFromSeeds, type DecryptTrace, type EncryptTrace, type KeyGenTrace } from './kpke.ts';
 export { H, J } from './mlkem.ts';

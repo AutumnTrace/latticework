@@ -86,11 +86,20 @@ Half of the decapsulation vectors use a modified ciphertext and check the implic
 
 The 8 large-data tests (64 GiB messages) are skipped.
 
+**The C2SP/CCTV vectors.** [CCTV](https://c2sp.org/CCTV/ML-KEM) targets failure modes that random vectors reach only by luck. The files are pinned to commit `b88c4b2` and hash-checked by the same fetcher. For each parameter set:
+
+- **strcmp**: a ciphertext that differs from its re-encryption only after a zero byte, so a comparison that stops at `0x00` would accept it. It must be rejected, and the key must be J(z ‖ c).
+- **modulus**: encapsulation keys with one unreduced coefficient (775, 780 and 1,040 keys). Between them they cover every value from q to 4095 and every coefficient position. Every key must fail the section 7.2 check, and encapsulation must refuse it.
+- **unlucky SampleNTT**: a key whose matrix entry (0, 0) needs more than 575 bytes of SHAKE128 output, which happens by chance with probability about 2⁻³⁸. The test checks that byte count as well as the key, the ciphertext and the shared secret.
+- **accumulated**: the 10,000 pseudo-random tests of pq-crystals' `test_vectors.c`, regenerated from a SHAKE128 stream and hashed into a single value. They take about a minute, so `npm test` skips them, and `npm run test:full` and CI run them.
+
+The unlucky and accumulated vectors were made for the FIPS 203 draft. In K-PKE.KeyGen the draft hashed G(d), where the final standard hashes G(d ‖ k), and nothing else differs. Those tests derive their keys the draft's way through `kpkeKeyGenFromSeeds`, which is Algorithm 13 from step 2 on, so everything after that one hash runs as the final standard has it.
+
 **Differential tests** run thousands of random seeds, messages and corrupted ciphertexts through both latticework and [@noble/post-quantum](https://github.com/paulmillr/noble-post-quantum), and compare every key, ciphertext, shared secret and rejection key byte for byte. SHA-3 and SHAKE are compared against @noble/hashes, with input lengths clustered around the 72-, 136- and 168-byte block boundaries.
 
 **Property tests** (fast-check): decapsulation recovers the secret for any seed and message; flipping any one of the ciphertext's bits gives exactly J(z ‖ c); multiplying through the NTT equals schoolbook multiplication mod X²⁵⁶ + 1; the encodings round-trip; compression error stays within its bound.
 
-In total there are 138 unit, vector and property tests (plus the 2 skipped large-data groups) and 6 Playwright tests of the explainer, all run by CI on every push.
+In total there are 151 unit, vector and property tests (plus the 2 skipped large-data groups) and 6 Playwright tests of the explainer, all run by CI on every push. `npm test` runs 148 of them in about two seconds and leaves the three accumulated runs to `npm run test:full`.
 
 ## The explainer
 
@@ -170,8 +179,9 @@ docs/                      how it works, devlog, media
 
 ```sh
 npm ci
-npm run vectors      # fetch and hash-check the NIST vectors (npm test does this too)
-npm test             # unit, vector, differential and property tests
+npm run vectors      # fetch and hash-check the NIST and CCTV vectors (npm test does this too)
+npm test             # unit, vector, differential and property tests (about 2 s)
+npm run test:full    # the same plus the accumulated CCTV runs (about a minute), as CI runs it
 npm run dev          # the explainer at http://localhost:5173/latticework/
 npm run build && npm run e2e
 npm run bench
@@ -182,8 +192,7 @@ npm run media        # regenerate docs/media (uses your installed Chrome)
 
 - **ML-DSA (FIPS 204)**: signatures, reusing Keccak and the same structure for the NTT, over a much larger q = 8,380,417.
 - **X-Wing**: the hybrid of X25519 and ML-KEM-768 from the CFRG draft, which needs an X25519 first.
-- **The C2SP/CCTV ML-KEM vectors**: the "unlucky" seeds that make SampleNTT reject many candidates, the ciphertext-comparison edge cases, and the accumulated test over a million pseudo-random runs.
-- **The ACVP large-data tests**, as a weekly CI job rather than on every push.
+- **The ACVP large-data tests and CCTV's million-test accumulated run**, as a weekly CI job rather than on every push.
 - **The explainer on phones.** It works but was laid out for a desktop window.
 
 ## Further reading
@@ -195,4 +204,4 @@ npm run media        # regenerate docs/media (uses your installed Chrome)
 
 ## License
 
-MIT. The ACVP test vectors are produced by NIST and are not subject to copyright in the United States; they are downloaded at test time, not stored in this repository.
+MIT. The ACVP test vectors are produced by NIST and are not subject to copyright in the United States. The CCTV vectors are CC0 1.0. Both are downloaded at test time, not stored in this repository.

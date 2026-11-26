@@ -20,6 +20,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present && tsc -p e2e/tsconfig.json",
     "lint": "oxlint --deny-warnings",
     "test": "vitest run",
+    "test:full": "vitest run --mode full",
     "test:watch": "vitest",
     "vectors": "node scripts/fetch-vectors.mjs",
     "format": "prettier --write .",
