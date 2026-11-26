@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Tested against the C2SP/CCTV ML-KEM vectors as well: the strcmp ciphertexts, keys with an unreduced coefficient, the unlucky SampleNTT seeds and the 10,000-test accumulated run, pinned and hash-checked like the ACVP files. `npm run test:full` includes the accumulated run, and CI runs it.
+- `kpkeKeyGenFromSeeds` in the internals: K-PKE.KeyGen from step 2 on, so that vectors made for the FIPS 203 draft can run through the rest of the real key generation.
+
 ## 0.1.0
 
 The first release.

@@ -73,10 +73,20 @@ export interface KeyGenTrace {
 
 /** K-PKE.KeyGen (Algorithm 13). Returns the 384k + 32 byte encryption key and the 384k byte decryption key. */
 export function kpkeKeyGen(params: ParameterSet, d: Uint8Array, trace?: KeyGenTrace): { ek: Uint8Array; dk: Uint8Array } {
-  const { k, eta1 } = params;
   // The byte k is appended for domain separation between parameter sets;
-  // it is in the final FIPS 203 but not in round-3 Kyber.
-  const [rho, sigma] = G(d, Uint8Array.of(k));
+  // it is in the final FIPS 203 but not in round-3 Kyber or the FIPS 203
+  // draft (ipd), which hashed d alone.
+  const [rho, sigma] = G(d, Uint8Array.of(params.k));
+  return kpkeKeyGenFromSeeds(params, rho, sigma, trace);
+}
+
+/**
+ * Algorithm 13 from step 2 on: everything after (rho, sigma) = G(d || k).
+ * Split out so tests can run vectors made for the FIPS 203 draft, which
+ * differs only in step 1, through the rest of the real key generation.
+ */
+export function kpkeKeyGenFromSeeds(params: ParameterSet, rho: Uint8Array, sigma: Uint8Array, trace?: KeyGenTrace): { ek: Uint8Array; dk: Uint8Array } {
+  const { k, eta1 } = params;
   const sampling: SampleNttStats = { candidates: 0, rejected: 0, bytes: 0 };
   const aHat = expandMatrix(rho, k, sampling);
   const s = sampleNoiseVector(sigma, eta1, k, 0);
