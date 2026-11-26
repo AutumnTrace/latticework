@@ -1,6 +1,6 @@
 {
   "name": "@autumntrace/latticework",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "ML-KEM (FIPS 203) from scratch: Keccak, the NTT, K-PKE and the KEM, with no runtime dependencies.",
   "type": "module",
   "license": "MIT",
